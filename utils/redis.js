@@ -3,25 +3,28 @@ import * as redis from 'redis';
 class RedisClient {
   constructor() {
     this.client = redis.createClient();
+    this.client.connect();
     this.client.on('error', (error) => {
       console.log(`Redis client not connected to the server: ${error.message}`);
     });
     this.client.on('connect', () => {
-      console.log('Redis client connected to the server');
     });
   }
 
   isAlive() {
-    return this.client.connect;
+    if (this.client.ping()) {
+      return true;
+    }
+    return false;
   }
 
   async get(key) {
-    const val = await this.client.get(key);
+    const val = this.client.get(key);
     return val;
   }
 
   async set(key, value, duration) {
-    this.client.setEx(key, duration, value);
+    this.client.set(key, value, { EX: duration });
   }
 
   async del(key) {
