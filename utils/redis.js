@@ -1,9 +1,9 @@
-import * as redis from 'redis';
+import redis from 'redis';
 
 class RedisClient {
   constructor() {
     this.client = redis.createClient();
-    this.client.connect();
+    // this.client.connect();
     this.client.on('error', (error) => {
       console.log(`Redis client not connected to the server: ${error.message}`);
     });
@@ -19,7 +19,7 @@ class RedisClient {
   }
 
   async get(key) {
-    const val = this.client.get(key);
+    const val = await this.client.get(key);
     return val;
   }
 
