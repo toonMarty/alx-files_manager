@@ -13,7 +13,7 @@ class UsersController {
     if (!password) return response.status(400).send({ error: 'Missing password' });
 
     const emailExists = await dbClient.users.findOne({ email });
-    if (emailExists) return response.status(400).send({ error: 'Already exist ' });
+    if (emailExists) return response.status(400).send({ error: 'Already exist' });
 
     const sha1Password = sha1(password);
     let result;
